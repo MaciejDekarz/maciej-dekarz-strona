@@ -242,6 +242,11 @@
             margin-bottom: 40px;
             border-left: 4px solid var(--primary-color);
             box-shadow: 0 5px 15px rgba(241, 196, 15, 0.1);
+            display: none;
+        }
+
+        .payment-section.active {
+            display: block;
         }
 
         .payment-section h3 {
@@ -300,6 +305,23 @@
         .pay-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .contact-section {
@@ -498,7 +520,7 @@
         </div>
 
         <!-- Payment Section -->
-        <div class="payment-section" id="paymentSection" style="display: none;">
+        <div class="payment-section" id="paymentSection">
             <h3 id="selectedTierName">Wybranie wsparcia</h3>
             <div class="payment-status" id="paymentStatus"></div>
             <form id="payment-form">
@@ -528,12 +550,20 @@
         let selectedAmount = null;
         let selectedTier = null;
 
-        // Initialize Stripe
-        async function initStripe() {
-            stripe = Stripe('pk_live_51UG6WdD8ADeIwiX6X0Vhp1pHiGtxkRL33yC7kN0djWewa0VlToE5SGm7xREbEYPnIaFx0cScb0qq9hXRnssprYvuc0073NGELAs');
-            elements = stripe.elements();
+        // Initialize Stripe (bez Payment Element na starcie)
+        stripe = Stripe('pk_live_51UG6WdD8ADeIwiX6X0Vhp1pHiGtxkRL33yC7kN0djWewa0VlToE5SGm7xREbEYPnIaFx0cScb0qq9hXRnssprYvuc0073NGELAs');
 
-            // Create Payment Element
+        async function initPaymentElement(clientSecret) {
+            // Tworzymy elements z clientSecret
+            elements = stripe.elements({
+                clientSecret: clientSecret
+            });
+
+            // Usuwamy stary Payment Element jeśli istnieje
+            const oldContainer = document.getElementById('payment-element');
+            oldContainer.innerHTML = '';
+
+            // Tworzymy nowy Payment Element
             const paymentElement = elements.create('payment');
             paymentElement.mount('#payment-element');
         }
@@ -572,26 +602,14 @@
             showPaymentForm();
         }
 
-        function showPaymentForm() {
-            document.getElementById('paymentSection').style.display = 'block';
-            document.getElementById('selectedTierName').textContent = selectedTier;
-
-            // Scroll to payment form
-            document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        document.getElementById('payment-form').addEventListener('submit', handleSubmit);
-
-        async function handleSubmit(e) {
-            e.preventDefault();
-
-            if (!selectedAmount) {
-                alert('Proszę wybrać kwotę wsparcia');
-                return;
-            }
-
-            const button = document.getElementById('submit');
+        async function showPaymentForm() {
             const statusDiv = document.getElementById('paymentStatus');
+            const button = document.getElementById('submit');
+
+            // Pokazujemy loading
+            statusDiv.textContent = 'Ładowanie formularza płatności...';
+            statusDiv.className = 'payment-status';
+            statusDiv.style.display = 'block';
 
             button.disabled = true;
 
@@ -606,16 +624,46 @@
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.error || 'Payment failed');
+                    throw new Error(data.error || 'Nie udało się stworzyć płatności');
                 }
 
+                // Inicjalizujemy Payment Element z clientSecret
+                await initPaymentElement(data.clientSecret);
+
+                // Ukrywamy status i pokazujemy formularz
+                statusDiv.style.display = 'none';
+                document.getElementById('paymentSection').classList.add('active');
+                document.getElementById('selectedTierName').textContent = selectedTier;
+
+                button.disabled = false;
+
+                // Scroll do formularza
+                document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
+            } catch (err) {
+                statusDiv.textContent = 'Błąd: ' + err.message;
+                statusDiv.classList.add('error');
+                statusDiv.classList.remove('success');
+                statusDiv.style.display = 'block';
+                button.disabled = false;
+            }
+        }
+
+        document.getElementById('payment-form').addEventListener('submit', handleSubmit);
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const button = document.getElementById('submit');
+            const statusDiv = document.getElementById('paymentStatus');
+
+            button.disabled = true;
+            button.innerHTML = '<span class="loading-spinner"></span>Przetwarzanie...';
+
+            try {
                 // Confirm payment with Stripe
                 const { error, paymentIntent } = await stripe.confirmPayment({
                     elements,
-                    clientSecret: data.clientSecret,
-                    confirmParams: {
-                        return_url: window.location.href + '?success=true'
-                    }
+                    redirect: 'if_required'
                 });
 
                 if (error) {
@@ -623,24 +671,32 @@
                     statusDiv.classList.add('error');
                     statusDiv.classList.remove('success');
                     statusDiv.style.display = 'block';
+                    button.innerHTML = '<span id="button-text">Zapłać</span>';
+                    button.disabled = false;
                 } else if (paymentIntent.status === 'succeeded') {
                     statusDiv.textContent = '✓ Dziękuję za wsparcie! Płatność powiodła się.';
                     statusDiv.classList.add('success');
                     statusDiv.classList.remove('error');
                     statusDiv.style.display = 'block';
-                    button.textContent = 'Dziękuję!';
+                    button.innerHTML = 'Dziękuję!';
+                } else {
+                    statusDiv.textContent = 'Status płatności: ' + paymentIntent.status;
+                    statusDiv.className = 'payment-status';
+                    statusDiv.style.display = 'block';
+                    button.innerHTML = '<span id="button-text">Zapłać</span>';
+                    button.disabled = false;
                 }
             } catch (err) {
                 statusDiv.textContent = 'Błąd: ' + err.message;
                 statusDiv.classList.add('error');
                 statusDiv.classList.remove('success');
                 statusDiv.style.display = 'block';
+                button.innerHTML = '<span id="button-text">Zapłać</span>';
+                button.disabled = false;
             }
-
-            button.disabled = false;
         }
 
-        // Check if payment was successful
+        // Check if payment was successful from URL
         function checkPaymentSuccess() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('success')) {
@@ -651,8 +707,6 @@
             }
         }
 
-        // Initialize on page load
-        initStripe();
         checkPaymentSuccess();
     </script>
 </body>
