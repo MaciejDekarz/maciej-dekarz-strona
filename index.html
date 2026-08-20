@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maciej Dekarz | Konsultacje Online i Media</title>
+    
+    <meta name="description" content="Ekspert Dekarstwa. Zarezerwuj konsultację online bezpośrednio w moim kalendarzu.">
+    <meta property="og:title" content="Maciej Dekarz - Ekspert Dekarstwa">
+    <meta property="og:description" content="Zarezerwuj termin konsultacji online lub umów inspekcję dachu.">
+    <meta property="og:image" content="https://maciejdekarz.pl/podglad.jpg">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #f1c40f; 
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            animation: fadeInPage 0.8s ease-out forwards;
+        }
+
+        .profile-pic {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-section {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%);
+            color: #1a1a1a;
+            text-decoration: none;
+            padding: 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(241, 196, 15, 0.4);
+        }
+
+        /* Przycisk oferty (obramowany) */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--text-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(241, 196, 15, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .premium-label {
+            font-size: 11px;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-bottom: -10px;
+            font-weight: bold;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .btn-social {
+            background-color: var(--card-bg);
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+        }
+
+        .btn-social i {
+            font-size: 20px;
+            width: 40px;
+        }
+
+        .btn-social:hover {
+            background-color: #2a2a2a;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .yt:hover i { color: #ff0000; }
+        .fb:hover i { color: #1877f2; }
+        .ig:hover i { color: #e4405f; }
+        .tk:hover i { color: #00f2ea; }
+
+        footer {
+            margin-top: 50px;
+            font-size: 12px;
+            color: #555;
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="zdjecie.jpg" alt="Maciej Dekarz" class="profile-pic">
+
+        <h1>Maciej Dekarz</h1>
+        <p class="tagline">Ekspert Dekarstwa & Doradztwo</p>
+
+        <div class="cta-section">
+            <span class="premium-label">Sklep & Edukacja</span>
+            <a href="https://nafty.pl" class="btn-premium" target="_blank">
+                <i class="fas fa-shopping-cart"></i>
+                KURSY I E-BOOKI
+            </a>
+
+            <span class="premium-label" style="margin-top: 10px;">Usługi</span>
+            <a href="oferta.html" class="btn-premium btn-outline">
+                <i class="fas fa-hard-hat"></i>
+                INSPEKCJE I ODBIORY DACHÓW
+            </a>
+        </div>
+
+        <div class="social-grid">
+            <a href="https://www.youtube.com/@MaciejDekarz" class="btn-social yt" target="_blank">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=100068956490224" class="btn-social fb" target="_blank">
+                <i class="fab fa-facebook-f"></i> Facebook
+            </a>
+            <a href="https://www.instagram.com/maciejdekarz/" class="btn-social ig" target="_blank">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.tiktok.com/@maciejdekarz" class="btn-social tk" target="_blank">
+                <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="mailto:biuro@maciejdekarz.pl" class="btn-social">
+                <i class="fas fa-envelope"></i> Kontakt e-mail
+            </a>
+        </div>
+
+        <footer>
+            &copy; 2024 Maciej Dekarz. Wszelkie prawa zastrzeżone.
+        </footer>
+    </div>
+
+</body>
+</html>
