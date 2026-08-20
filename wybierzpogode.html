@@ -117,11 +117,6 @@
             border-left-color: var(--accent-color);
         }
 
-        .support-card.selected {
-            background-color: rgba(241, 196, 15, 0.1);
-            border-left-color: var(--accent-color);
-        }
-
         .weather-icon {
             font-size: 48px;
             margin-bottom: 15px;
@@ -156,7 +151,37 @@
             color: #bbb;
             font-size: 14px;
             line-height: 1.6;
-            margin-bottom: 0;
+            margin-bottom: 15px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: #1a1a1a;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.3);
+        }
+
+        .cta-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .info-box {
@@ -193,7 +218,6 @@
         .custom-input-group {
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
         }
 
         .custom-input-group input {
@@ -213,115 +237,27 @@
         .custom-input-group input:focus {
             outline: none;
             border-color: var(--primary-color);
-            background-color: rgba(255, 255, 255, 0.15);
         }
 
-        .custom-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-            color: #1a1a1a;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .custom-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.3);
-        }
-
-        .payment-section {
-            background-color: var(--card-bg);
+        .success-box {
+            background: rgba(76, 175, 80, 0.15);
+            border: 2px solid #4caf50;
             border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 40px;
-            border-left: 4px solid var(--primary-color);
-            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.1);
-            display: none;
-        }
-
-        .payment-section.active {
-            display: block;
-        }
-
-        .payment-section h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        #payment-element {
-            margin-bottom: 20px;
-        }
-
-        .payment-status {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 30px;
             text-align: center;
+            margin-bottom: 40px;
             display: none;
         }
 
-        .payment-status.success {
-            background-color: rgba(76, 175, 80, 0.2);
+        .success-box h2 {
             color: #4caf50;
-            border: 1px solid #4caf50;
-            display: block;
+            font-size: 24px;
+            margin-bottom: 10px;
         }
 
-        .payment-status.error {
-            background-color: rgba(244, 67, 54, 0.2);
-            color: #f44336;
-            border: 1px solid #f44336;
-            display: block;
-        }
-
-        .pay-button {
-            width: 100%;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
-            color: #1a1a1a;
-            padding: 14px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 700;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .pay-button:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.3);
-        }
-
-        .pay-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .success-box p {
+            color: #bbb;
+            font-size: 14px;
         }
 
         .contact-section {
@@ -378,7 +314,6 @@
         footer a {
             color: var(--primary-color);
             text-decoration: none;
-            transition: color 0.3s ease;
         }
 
         footer a:hover {
@@ -391,30 +326,11 @@
         }
 
         @media (max-width: 600px) {
-            .container {
-                max-width: 100%;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .section-title {
-                font-size: 16px;
-                margin-top: 25px;
-            }
-
-            .support-card {
-                padding: 18px;
-            }
-
-            .contact-section {
-                padding: 20px;
-            }
-
-            .weather-icon {
-                font-size: 40px;
-            }
+            h1 { font-size: 24px; }
+            .section-title { font-size: 16px; }
+            .support-card { padding: 18px; }
+            .contact-section { padding: 20px; }
+            .weather-icon { font-size: 40px; }
         }
     </style>
 </head>
@@ -430,6 +346,12 @@
             <p class="tagline">Pogoda na Wspieranie</p>
         </header>
 
+        <!-- Wiadomość sukcesu po płatności -->
+        <div class="success-box" id="successBox">
+            <h2>✓ Dziękuję za wsparcie!</h2>
+            <p>Twoja płatność została przyjęta. Dzięki Tobie mogę tworzyć więcej materiałów! 🙏</p>
+        </div>
+
         <div class="info-box">
             <p>Wybierz pogodę na wspieranie kanału! Każda złotówka to dodatkowa energia na kolejne projekty. Dziękuję za wsparcie! 🙏</p>
         </div>
@@ -438,7 +360,7 @@
 
         <div class="support-grid">
             <!-- Tier 1 -->
-            <div class="support-card" onclick="selectSupport(500, 'Pogoda Sprzyjająca')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">🌧️</div>
                     <div class="card-title-section">
@@ -447,10 +369,11 @@
                     </div>
                 </div>
                 <p class="support-description">Ziomno, mokro, ale daje robić!</p>
+                <button class="cta-button" onclick="pay(500, 'Pogoda Sprzyjająca - 5 zł', this)">Wspieraj 5 zł</button>
             </div>
 
             <!-- Tier 2 -->
-            <div class="support-card" onclick="selectSupport(1000, 'Bez Wiatru')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">🌦️</div>
                     <div class="card-title-section">
@@ -459,10 +382,11 @@
                     </div>
                 </div>
                 <p class="support-description">Zimno i mokro, ale w końcu mogę normalnie położyć membranę!</p>
+                <button class="cta-button" onclick="pay(1000, 'Bez Wiatru - 10 zł', this)">Wspieraj 10 zł</button>
             </div>
 
             <!-- Tier 3 -->
-            <div class="support-card" onclick="selectSupport(2000, 'Bez Deszczu')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">☁️</div>
                     <div class="card-title-section">
@@ -471,10 +395,11 @@
                     </div>
                 </div>
                 <p class="support-description">W końcu rękawice będą suche – pracuje się lepiej!</p>
+                <button class="cta-button" onclick="pay(2000, 'Bez Deszczu - 20 zł', this)">Wspieraj 20 zł</button>
             </div>
 
             <!-- Tier 4 -->
-            <div class="support-card" onclick="selectSupport(5000, 'Słonecznie')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">🌥️</div>
                     <div class="card-title-section">
@@ -483,10 +408,11 @@
                     </div>
                 </div>
                 <p class="support-description">Wreszcie można pracować normalnie – bez gry w łapanie wiatru!</p>
+                <button class="cta-button" onclick="pay(5000, 'Słonecznie - 50 zł', this)">Wspieraj 50 zł</button>
             </div>
 
             <!-- Tier 5 -->
-            <div class="support-card" onclick="selectSupport(10000, 'Idealna Pogoda')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">🌤️</div>
                     <div class="card-title-section">
@@ -495,10 +421,11 @@
                     </div>
                 </div>
                 <p class="support-description">Wszystko się zgadza – teraz opalić się można bez wyrzutów sumienia!</p>
+                <button class="cta-button" onclick="pay(10000, 'Idealna Pogoda - 100 zł', this)">Wspieraj 100 zł</button>
             </div>
 
             <!-- Tier 6 -->
-            <div class="support-card" onclick="selectSupport(20000, 'Idealna Pogoda na Cały Sezon')">
+            <div class="support-card">
                 <div class="card-header">
                     <div class="weather-icon">☀️</div>
                     <div class="card-title-section">
@@ -507,28 +434,17 @@
                     </div>
                 </div>
                 <p class="support-description">Jazda z ... Dachami! 💵💵💵🤑🤑🤑</p>
+                <button class="cta-button" onclick="pay(20000, 'Idealna Pogoda na Cały Sezon - 200 zł', this)">Wspieraj 200 zł</button>
             </div>
         </div>
 
-        <!-- Custom Amount Section -->
+        <!-- Własna kwota -->
         <div class="custom-section">
             <h3>🌈 Twoja Własna Pogoda</h3>
             <div class="custom-input-group">
                 <input type="number" id="customAmount" placeholder="Wpisz kwotę (zł)" min="1" step="1">
-                <button class="custom-btn" onclick="selectCustomSupport()">Wspieraj</button>
+                <button class="cta-button" style="width:auto;white-space:nowrap;" onclick="payCustom(this)">Wspieraj</button>
             </div>
-        </div>
-
-        <!-- Payment Section -->
-        <div class="payment-section" id="paymentSection">
-            <h3 id="selectedTierName">Wybranie wsparcia</h3>
-            <div class="payment-status" id="paymentStatus"></div>
-            <form id="payment-form">
-                <div id="payment-element"></div>
-                <button type="submit" class="pay-button" id="submit">
-                    <span id="button-text">Zapłać</span>
-                </button>
-            </form>
         </div>
 
         <!-- CONTACT CTA -->
@@ -543,178 +459,48 @@
         </footer>
     </div>
 
-    <script src="https://js.stripe.com/v3/"></script>
     <script>
-        let stripe;
-        let elements;
-        let selectedAmount = null;
-        let selectedTier = null;
-
-        // Initialize Stripe (bez Payment Element na starcie)
-        stripe = Stripe('pk_live_51UG6WdD8ADeIwiX6X0Vhp1pHiGtxkRL33yC7kN0djWewa0VlToE5SGm7xREbEYPnIaFx0cScb0qq9hXRnssprYvuc0073NGELAs');
-
-        async function initPaymentElement(clientSecret) {
-            // Tworzymy elements z clientSecret
-            elements = stripe.elements({
-                clientSecret: clientSecret
-            });
-
-            // Usuwamy stary Payment Element jeśli istnieje
-            const oldContainer = document.getElementById('payment-element');
-            oldContainer.innerHTML = '';
-
-            // Tworzymy nowy Payment Element
-            const paymentElement = elements.create('payment');
-            paymentElement.mount('#payment-element');
+        // Sprawdzamy czy użytkownik wrócił po udanej płatności
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('success') === 'true') {
+            document.getElementById('successBox').style.display = 'block';
         }
 
-        function selectSupport(amountInGroszy, tierName) {
-            selectedAmount = amountInGroszy;
-            selectedTier = tierName;
-
-            // Remove previous selection styling
-            document.querySelectorAll('.support-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            // Add selection styling to clicked card
-            event.currentTarget.classList.add('selected');
-
-            showPaymentForm();
-        }
-
-        function selectCustomSupport() {
-            const customAmount = document.getElementById('customAmount').value;
-
-            if (!customAmount || parseInt(customAmount) < 1) {
-                alert('Proszę wpisać kwotę większą niż 0');
-                return;
-            }
-
-            selectedAmount = parseInt(customAmount) * 100; // Convert to groszy
-            selectedTier = 'Własna kwota: ' + customAmount + ' zł';
-
-            // Remove previous selection styling
-            document.querySelectorAll('.support-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-
-            showPaymentForm();
-        }
-
-        async function showPaymentForm() {
-            const statusDiv = document.getElementById('paymentStatus');
-            const button = document.getElementById('submit');
-            const paymentSection = document.getElementById('paymentSection');
-
-            // Najpierw pokazujemy sekcję płatności i ustawiamy tytuł
-            document.getElementById('selectedTierName').textContent = selectedTier;
-            paymentSection.classList.add('active');
-            paymentSection.scrollIntoView({ behavior: 'smooth' });
-
-            // Pokazujemy ładowanie wewnątrz diva
-            document.getElementById('payment-element').innerHTML = '<p style="color:#aaa;text-align:center;padding:20px;">⏳ Ładowanie formularza płatności...</p>';
-            button.disabled = true;
-            statusDiv.style.display = 'none';
+        async function pay(amountInGroszy, tierName, btn) {
+            btn.disabled = true;
+            btn.textContent = '⏳ Przetwarzanie...';
 
             try {
-                // Tworzymy PaymentIntent na backendzie
                 const response = await fetch('/.netlify/functions/payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: selectedAmount })
+                    body: JSON.stringify({ amount: amountInGroszy, tierName: tierName })
                 });
 
                 const data = await response.json();
 
-                if (!response.ok) {
-                    throw new Error(data.error || 'Nie udało się stworzyć płatności');
+                if (!response.ok || !data.url) {
+                    throw new Error(data.error || 'Błąd płatności');
                 }
 
-                // Czyścimy loading
-                document.getElementById('payment-element').innerHTML = '';
-
-                // Inicjalizujemy elements z clientSecret
-                elements = stripe.elements({
-                    clientSecret: data.clientSecret
-                });
-
-                // Tworzymy i montujemy Payment Element
-                const paymentElement = elements.create('payment');
-                paymentElement.mount('#payment-element');
-
-                // Aktywujemy przycisk od razu
-                button.disabled = false;
+                // Przekierowanie na stronę Stripe
+                window.location.href = data.url;
 
             } catch (err) {
-                document.getElementById('payment-element').innerHTML = '';
-                statusDiv.textContent = 'Błąd: ' + err.message;
-                statusDiv.className = 'payment-status error';
-                statusDiv.style.display = 'block';
-                button.disabled = false;
+                alert('Błąd: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Wspieraj';
             }
         }
 
-        document.getElementById('payment-form').addEventListener('submit', handleSubmit);
-
-        async function handleSubmit(e) {
-            e.preventDefault();
-
-            const button = document.getElementById('submit');
-            const statusDiv = document.getElementById('paymentStatus');
-
-            button.disabled = true;
-            button.innerHTML = '<span class="loading-spinner"></span>Przetwarzanie...';
-
-            try {
-                // Confirm payment with Stripe
-                const { error, paymentIntent } = await stripe.confirmPayment({
-                    elements,
-                    redirect: 'if_required'
-                });
-
-                if (error) {
-                    statusDiv.textContent = 'Błąd: ' + error.message;
-                    statusDiv.classList.add('error');
-                    statusDiv.classList.remove('success');
-                    statusDiv.style.display = 'block';
-                    button.innerHTML = '<span id="button-text">Zapłać</span>';
-                    button.disabled = false;
-                } else if (paymentIntent.status === 'succeeded') {
-                    statusDiv.textContent = '✓ Dziękuję za wsparcie! Płatność powiodła się.';
-                    statusDiv.classList.add('success');
-                    statusDiv.classList.remove('error');
-                    statusDiv.style.display = 'block';
-                    button.innerHTML = 'Dziękuję!';
-                } else {
-                    statusDiv.textContent = 'Status płatności: ' + paymentIntent.status;
-                    statusDiv.className = 'payment-status';
-                    statusDiv.style.display = 'block';
-                    button.innerHTML = '<span id="button-text">Zapłać</span>';
-                    button.disabled = false;
-                }
-            } catch (err) {
-                statusDiv.textContent = 'Błąd: ' + err.message;
-                statusDiv.classList.add('error');
-                statusDiv.classList.remove('success');
-                statusDiv.style.display = 'block';
-                button.innerHTML = '<span id="button-text">Zapłać</span>';
-                button.disabled = false;
+        async function payCustom(btn) {
+            const amount = parseInt(document.getElementById('customAmount').value);
+            if (!amount || amount < 1) {
+                alert('Wpisz kwotę większą niż 0');
+                return;
             }
+            await pay(amount * 100, 'Własna kwota - ' + amount + ' zł', btn);
         }
-
-        // Check if payment was successful from URL
-        function checkPaymentSuccess() {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('success')) {
-                const statusDiv = document.getElementById('paymentStatus');
-                statusDiv.textContent = '✓ Dziękuję za wsparcie! Płatność powiodła się.';
-                statusDiv.classList.add('success');
-                statusDiv.style.display = 'block';
-            }
-        }
-
-        checkPaymentSuccess();
     </script>
 </body>
 </html>
