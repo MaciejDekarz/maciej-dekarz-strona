@@ -641,13 +641,9 @@
 
                 // Tworzymy i montujemy Payment Element
                 const paymentElement = elements.create('payment');
+                paymentElement.mount('#payment-element');
 
-                // Czekamy aż element będzie gotowy
-                await new Promise((resolve) => {
-                    paymentElement.on('ready', resolve);
-                    paymentElement.mount('#payment-element');
-                });
-
+                // Aktywujemy przycisk od razu
                 button.disabled = false;
 
             } catch (err) {
