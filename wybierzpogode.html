@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maciej Dekarz | Pogoda na Wspieranie</title>
+
+    <meta name="description" content="Wspieraj kanał Maciej Dekarz i wybierz pogodę na wspieranie. Różne poziomy wsparcia dla twórcy dekarskiego.">
+    <meta property="og:title" content="Maciej Dekarz - Pogoda na Wspieranie">
+    <meta property="og:description" content="Wybierz pogodę na wspieranie kanału Maciej Dekarz.">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        :root {
+            --primary-color: #f1c40f;
+            --dark-bg: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #e67e22;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            animation: fadeInPage 0.8s ease-out forwards;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .back-link {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .back-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link a:hover {
+            transform: translateX(-5px);
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary-color);
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .support-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .support-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(241, 196, 15, 0.2);
+            border-left-color: var(--accent-color);
+        }
+
+        .support-card.selected {
+            background-color: rgba(241, 196, 15, 0.1);
+            border-left-color: var(--accent-color);
+        }
+
+        .weather-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .card-title-section {
+            flex: 1;
+        }
+
+        .support-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+
+        .support-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .support-description {
+            color: #bbb;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: rgba(241, 196, 15, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 50px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .info-box p {
+            color: #bbb;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .custom-amount-section {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 50px;
+            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.1);
+        }
+
+        .custom-amount-section h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .input-group input::placeholder {
+            color: #777;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: #1a1a1a;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(241, 196, 15, 0.3);
+        }
+
+        .cta-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+            box-shadow: 0 10px 30px rgba(241, 196, 15, 0.3);
+        }
+
+        .contact-section h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .contact-section p {
+            color: rgba(26, 26, 26, 0.9);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .contact-section a {
+            display: inline-block;
+            background: #1a1a1a;
+            color: var(--primary-color);
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-section a:hover {
+            transform: translateY(-3px);
+            background: #2a2a2a;
+            color: var(--accent-color);
+        }
+
+        #card-element {
+            padding: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-color);
+            margin-bottom: 15px;
+        }
+
+        .error {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #51cf66;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent-color);
+        }
+
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 16px;
+                margin-top: 25px;
+            }
+
+            .support-card {
+                padding: 18px;
+            }
+
+            .contact-section {
+                padding: 20px;
+            }
+
+            .weather-icon {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="back-link">
+            <a href="index.html">← Powrót</a>
+        </div>
+
+        <header>
+            <h1>Maciej Dekarz</h1>
+            <p class="tagline">Pogoda na Wspieranie</p>
+        </header>
+
+        <div class="info-box">
+            <p>Wybierz pogodę na wspieranie kanału! Każda złotówka to dodatkowa energia na kolejne projekty. Dziękuję za wsparcie! 🙏</p>
+        </div>
+
+        <h2 class="section-title">Poziomy Wsparcia</h2>
+
+        <div class="support-grid">
+            <!-- Tier 1 -->
+            <div class="support-card" onclick="selectSupport(this, 5)">
+                <div class="card-header">
+                    <div class="weather-icon">🌧️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Pogoda Sprzyjająca</div>
+                        <div class="support-price">5 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">Ziomno, mokro, ale daje robić!</p>
+            </div>
+
+            <!-- Tier 2 -->
+            <div class="support-card" onclick="selectSupport(this, 10)">
+                <div class="card-header">
+                    <div class="weather-icon">🌦️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Bez Wiatru</div>
+                        <div class="support-price">10 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">Zimno i mokro, ale w końcu mogę normalnie położyć membranę!</p>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="support-card" onclick="selectSupport(this, 20)">
+                <div class="card-header">
+                    <div class="weather-icon">☁️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Bez Deszczu</div>
+                        <div class="support-price">20 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">W końcu rękawice będą suche – pracuje się lepiej!</p>
+            </div>
+
+            <!-- Tier 4 -->
+            <div class="support-card" onclick="selectSupport(this, 50)">
+                <div class="card-header">
+                    <div class="weather-icon">🌥️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Słonecznie</div>
+                        <div class="support-price">50 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">Wreszcie można pracować normalnie – bez gry w łapanie wiatru!</p>
+            </div>
+
+            <!-- Tier 5 -->
+            <div class="support-card" onclick="selectSupport(this, 100)">
+                <div class="card-header">
+                    <div class="weather-icon">🌤️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Idealna Pogoda</div>
+                        <div class="support-price">100 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">Wszystko się zgadza – teraz opalić się można bez wyrzutów sumienia!</p>
+            </div>
+
+            <!-- Tier 6 -->
+            <div class="support-card" onclick="selectSupport(this, 200)">
+                <div class="card-header">
+                    <div class="weather-icon">☀️</div>
+                    <div class="card-title-section">
+                        <div class="support-title">Idealna Pogoda na Cały Sezon</div>
+                        <div class="support-price">200 zł</div>
+                    </div>
+                </div>
+                <p class="support-description">Jazda z ... Dachami! 💵💵💵🤑🤑🤑</p>
+            </div>
+        </div>
+
+        <!-- Custom Amount Section -->
+        <div class="custom-amount-section">
+            <h3>🌈 Twoja Własna Pogoda</h3>
+            <div class="input-group">
+                <input type="number" id="customAmount" placeholder="Wpisz kwotę (zł)" min="1" value="">
+                <button class="cta-button" onclick="selectSupport(null, null)">Wspieraj</button>
+            </div>
+            <div id="customError" class="error"></div>
+        </div>
+
+        <!-- Payment Form -->
+        <form id="payment-form" style="display:none; margin-bottom: 50px;">
+            <div id="card-element"></div>
+            <div id="card-errors" class="error"></div>
+            <button type="submit" class="cta-button" id="submit-button">Zapłać</button>
+            <div id="payment-message" class="success" style="display:none;"></div>
+        </form>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2>Pytania?</h2>
+            <p>Skontaktuj się w sprawie szczegółów wsparcia</p>
+            <a href="mailto:biuro@maciejdekarz.pl">Wyślij wiadomość</a>
+        </div>
+
+        <footer>
+            &copy; 2024 Maciej Dekarz. Wszelkie prawa zastrzeżone. | <a href="index.html">Strona główna</a>
+        </footer>
+    </div>
+
+    <script>
+        let stripe = Stripe('pk_live_51U6WdD8ADelwIx6X0VhplpHiGtxKRLs3YC7kRNdjWewa0VIToEsGGm7xREbEYPnIaFx0cScb0qg9hXRnspprYvuc0073NGELAs');
+        let elements = stripe.elements();
+        let cardElement = elements.create('card');
+        let selectedAmount = null;
+
+        function selectSupport(card, amount) {
+            if (card) {
+                document.querySelectorAll('.support-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedAmount = amount;
+                document.getElementById('customAmount').value = '';
+                document.getElementById('payment-form').style.display = 'block';
+                cardElement.mount('#card-element');
+            } else {
+                const customAmount = document.getElementById('customAmount').value;
+                if (!customAmount || customAmount < 1) {
+                    document.getElementById('customError').textContent = 'Wpisz kwotę większą niż 0 zł';
+                    return;
+                }
+                selectedAmount = parseFloat(customAmount);
+                document.querySelectorAll('.support-card').forEach(c => c.classList.remove('selected'));
+                document.getElementById('customError').textContent = '';
+                document.getElementById('payment-form').style.display = 'block';
+                cardElement.mount('#card-element');
+            }
+        }
+
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!selectedAmount) {
+                alert('Wybierz kwotę wsparcia');
+                return;
+            }
+
+            document.getElementById('submit-button').disabled = true;
+            document.getElementById('submit-button').textContent = 'Przetwarzam...';
+
+            // Wyślij do Netlify Function
+            const response = await fetch('/.netlify/functions/payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: selectedAmount * 100 }) // Stripe wymaga centów
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                document.getElementById('card-errors').textContent = data.error;
+                document.getElementById('submit-button').disabled = false;
+                document.getElementById('submit-button').textContent = 'Zapłać';
+                return;
+            }
+
+            const result = await stripe.confirmCardPayment(data.clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                    billing_details: {}
+                }
+            });
+
+            if (result.error) {
+                document.getElementById('card-errors').textContent = result.error.message;
+                document.getElementById('submit-button').disabled = false;
+                document.getElementById('submit-button').textContent = 'Zapłać';
+            } else {
+                document.getElementById('payment-form').style.display = 'none';
+                document.getElementById('payment-message').style.display = 'block';
+                document.getElementById('payment-message').textContent = '✅ Dziękuję za wsparcie! Płatność przesłana.';
+            }
+        });
+    </script>
+
+</body>
+</html>
