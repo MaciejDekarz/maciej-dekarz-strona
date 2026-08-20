@@ -605,16 +605,20 @@
         async function showPaymentForm() {
             const statusDiv = document.getElementById('paymentStatus');
             const button = document.getElementById('submit');
+            const paymentSection = document.getElementById('paymentSection');
 
-            // Pokazujemy loading
-            statusDiv.textContent = 'Ładowanie formularza płatności...';
-            statusDiv.className = 'payment-status';
-            statusDiv.style.display = 'block';
+            // Najpierw pokazujemy sekcję płatności i ustawiamy tytuł
+            document.getElementById('selectedTierName').textContent = selectedTier;
+            paymentSection.classList.add('active');
+            paymentSection.scrollIntoView({ behavior: 'smooth' });
 
+            // Pokazujemy ładowanie wewnątrz diva
+            document.getElementById('payment-element').innerHTML = '<p style="color:#aaa;text-align:center;padding:20px;">⏳ Ładowanie formularza płatności...</p>';
             button.disabled = true;
+            statusDiv.style.display = 'none';
 
             try {
-                // Create Payment Intent on backend
+                // Tworzymy PaymentIntent na backendzie
                 const response = await fetch('/.netlify/functions/payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -627,22 +631,29 @@
                     throw new Error(data.error || 'Nie udało się stworzyć płatności');
                 }
 
-                // Inicjalizujemy Payment Element z clientSecret
-                await initPaymentElement(data.clientSecret);
+                // Czyścimy loading
+                document.getElementById('payment-element').innerHTML = '';
 
-                // Ukrywamy status i pokazujemy formularz
-                statusDiv.style.display = 'none';
-                document.getElementById('paymentSection').classList.add('active');
-                document.getElementById('selectedTierName').textContent = selectedTier;
+                // Inicjalizujemy elements z clientSecret
+                elements = stripe.elements({
+                    clientSecret: data.clientSecret
+                });
+
+                // Tworzymy i montujemy Payment Element
+                const paymentElement = elements.create('payment');
+
+                // Czekamy aż element będzie gotowy
+                await new Promise((resolve) => {
+                    paymentElement.on('ready', resolve);
+                    paymentElement.mount('#payment-element');
+                });
 
                 button.disabled = false;
 
-                // Scroll do formularza
-                document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth' });
             } catch (err) {
+                document.getElementById('payment-element').innerHTML = '';
                 statusDiv.textContent = 'Błąd: ' + err.message;
-                statusDiv.classList.add('error');
-                statusDiv.classList.remove('success');
+                statusDiv.className = 'payment-status error';
                 statusDiv.style.display = 'block';
                 button.disabled = false;
             }
