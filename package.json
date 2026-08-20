@@ -1,0 +1,8 @@
+{
+  "name": "maciej-dekarz-strona",
+  "version": "1.0.0",
+  "description": "Strona Maciej Dekarz",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}
